@@ -12,7 +12,7 @@ export const Category = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       const response = await fetch("http://localhost:8000/food-category/");
-      console.log(response);
+      console.log("http://localhost:8000/food-category/");
       const data = await response.json();
       setFoodCategory(data);
     };
