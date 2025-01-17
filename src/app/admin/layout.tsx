@@ -1,6 +1,6 @@
 import { Navigation } from "./_components/Navigation";
 
-function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -12,5 +12,3 @@ function RootLayout({
     </div>
   );
 }
-
-export { RootLayout };
