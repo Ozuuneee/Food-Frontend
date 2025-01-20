@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { Navigation } from "./Navigation";
 
 type CategoryType = {
   categoryName: string;
