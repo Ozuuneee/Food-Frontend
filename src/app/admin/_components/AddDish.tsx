@@ -15,22 +15,19 @@ import { useState } from "react";
 import { CategoryType } from "./Dishes";
 
 interface AddDishProps {
-  categoryName: string;
-  setFood: React.Dispatch<React.SetStateAction<any>>;
-  food: any;
-  handleUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  categoryName: string,
+  _id: string
 }
 
-export const AddDish = ({
-  categoryName,
-  setFood,
-  food,
-  handleUpload,
-  onChange,
-}: AddDishProps) => {
+export const AddDish = ({ categoryName,_id }: AddDishProps) => {
+  const [food, setFood] = useState({
+    name: "",
+    price: 0,
+    ingredients: "",
+    image: "",
+    category: _id,
+  });
+
   const addDish = async () => {
     await fetch("http://localhost:8000/food/", {
       headers: {
@@ -40,6 +37,35 @@ export const AddDish = ({
       method: "POST",
       body: JSON.stringify(food),
     });
+  };
+
+  const onChange = (e: any) => {
+    console.log("--", e.target.name, e.target.value);
+    setFood({
+      ...food,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "food-delivery");
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dg1tgxuba/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      const dataJson = await response.json();
+      setFood((prev: any) => ({ ...prev, image: dataJson.secure_url }));
+    }
   };
 
   return (
