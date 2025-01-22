@@ -1,7 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -23,8 +23,8 @@ type CategoryType = {
 };
 
 export const Category = () => {
-  const [foodCategory, setFoodCategory] = useState<CategoryType[]>();
-  const [newCategory, setNewCategory] = useState<string>();
+  const [foodCategory, setFoodCategory] = useState<CategoryType[]>([]);
+  const [newCategory, setNewCategory] = useState<string>("");
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -36,8 +36,10 @@ export const Category = () => {
     fetchCategory();
   }, []);
 
-  const addCategory = () => {
-    fetch("http://localhost:8000/food-category/", {
+  const addCategory = async () => {
+    if (!newCategory.trim()) return;
+
+    const response = await fetch("http://localhost:8000/food-category/", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -45,36 +47,41 @@ export const Category = () => {
       method: "POST",
       body: JSON.stringify({ categoryName: newCategory }),
     });
-    setNewCategory("");
+
+    if (response.ok) {
+      const newCategoryData = await response.json();
+      setFoodCategory((prev) => [...prev, newCategoryData]);
+      setNewCategory("");
+    }
   };
 
   return (
-    <div className=" w-full p-6 rounded-xl  flex flex-col gap-4 bg-background ">
-      <h4 className=" text-xl font-semibold  ">Dishes Category</h4>
-      <div className="flex flex-wrap gap-3 ">
+    <div className="w-full p-6 rounded-xl flex flex-col gap-4 bg-background">
+      <h4 className="text-xl font-semibold">Dishes Category</h4>
+      <div className="flex flex-wrap gap-3">
         <Link href={`/admin/menu`}>
           <Badge
             variant="outline"
-            className=" rounded-full border py-2 px-4 flex gap-2 text-sm font-medium "
+            className="rounded-full border py-2 px-4 flex gap-2 text-sm font-medium"
           >
             All dishes
           </Badge>
         </Link>
-        {foodCategory?.map((category) => {
-          return (
-            <Link href={`/admin/menu/${category._id}`} key={category._id}>
-              <Badge
-                variant="outline"
-                className=" rounded-full border py-2 px-4 flex gap-2 text-sm font-medium "
-              >
-                {category.categoryName}
-              </Badge>
-            </Link>
-          );
-        })}
+
+        {foodCategory.map((category) => (
+          <Link key={category._id} href={`/admin/menu/${category._id}`}>
+            <Badge
+              variant="outline"
+              className="rounded-full border py-2 px-4 flex gap-2 text-sm font-medium"
+            >
+              {category.categoryName}
+            </Badge>
+          </Link>
+        ))}
+
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="destructive" className="rounded-full  p-[10px]">
+            <Button variant="destructive" className="rounded-full p-[10px]">
               <Plus />
             </Button>
           </DialogTrigger>
@@ -89,21 +96,14 @@ export const Category = () => {
                 type="text"
                 className="w-[412px]"
                 placeholder="Type category name..."
+                value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
                 required
-                pattern="[A-Za-z]"
               />
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button
-                  type="submit"
-                  onClick={() => {
-                    if (newCategory) {
-                      addCategory();
-                    }
-                  }}
-                >
+                <Button type="submit" onClick={addCategory}>
                   Add category
                 </Button>
               </DialogClose>
