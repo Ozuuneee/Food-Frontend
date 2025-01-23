@@ -11,15 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Plus, Image } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CategoryType } from "./Dishes";
 
 interface AddDishProps {
-  categoryName: string;
-  _id: string;
+  categoryName: string,
+  _id: string
 }
 
-export const AddDish = ({ categoryName, _id }: AddDishProps) => {
+export const AddDish = ({ categoryName,_id }: AddDishProps) => {
   const [food, setFood] = useState({
     name: "",
     price: 0,
@@ -56,7 +56,7 @@ export const AddDish = ({ categoryName, _id }: AddDishProps) => {
       data.append("upload_preset", "food-delivery");
 
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/da4z9uuli/upload`,
+        `https://api.cloudinary.com/v1_1/dg1tgxuba/upload`,
         {
           method: "POST",
           body: data,
