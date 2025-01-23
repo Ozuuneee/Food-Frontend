@@ -46,7 +46,7 @@ export const Header = () => {
           <PopoverTrigger className="bg-red-500 text-primary-foreground rounded-full px-3 py-[11px] flex items-center">
             <User size={18} strokeWidth={1.5} />
           </PopoverTrigger>
-          <PopoverContent>Place content for the popover here.</PopoverContent>
+          <PopoverContent>Popover</PopoverContent>
         </Popover>
       </div>
     </div>
