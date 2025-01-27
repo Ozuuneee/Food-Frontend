@@ -16,6 +16,7 @@ export type FoodType = {
   image: string;
   ingredients: string;
   category: string;
+  foods: string;
 };
 
 export const Dishes = () => {
