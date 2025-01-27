@@ -1,18 +1,24 @@
 import { useAuth } from "@clerk/nextjs";
 import path from "path";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { CategoryType } from "@/app/admin/_components/Dishes";
 
 export function useAuthFetch(path: any) {
+  const { getToken } = useAuth();
   const [data, setData] = useState<CategoryType[]>();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`http://localhost:8000/${path}`);
-      const data = await response.json();
-      setData(data);
-    };
 
-    fetchData();
+  async function getFetchData() {
+    const token = await getToken();
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${path}`, {
+      headers: {
+        Authentication: `token`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }
+  useEffect(() => {
+    getFetchData();
   }, []);
 
   return data;
