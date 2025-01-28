@@ -11,17 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Plus, Image } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { CategoryType } from "./Dishes";
-import { FoodType } from "./FilteredFood";
 
 interface AddDishProps {
-  categoryName: string;
-  _id: string;
-  setFoods: Dispatch<SetStateAction<FoodType[]>> | undefined;
+  categoryName: string,
+  _id: string
 }
 
-export const AddDish = ({ categoryName, _id, setFoods }: AddDishProps) => {
+export const AddDish = ({ categoryName,_id }: AddDishProps) => {
   const [food, setFood] = useState({
     name: "",
     price: 0,
@@ -31,7 +29,7 @@ export const AddDish = ({ categoryName, _id, setFoods }: AddDishProps) => {
   });
 
   const addDish = async () => {
-    const response = await fetch("http://localhost:8000/food/", {
+    await fetch("http://localhost:8000/food/", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -39,8 +37,6 @@ export const AddDish = ({ categoryName, _id, setFoods }: AddDishProps) => {
       method: "POST",
       body: JSON.stringify(food),
     });
-    const newFood = await response.json();
-    setFoods && setFoods((prev) => [...prev, newFood]);
   };
 
   const onChange = (e: any) => {

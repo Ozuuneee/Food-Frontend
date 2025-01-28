@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Header } from "./_components/Header";
 import { Categories } from "./_components/Categories";
 import { Dishes } from "./_components/Dishes";
-import Footer from "./_components/Footer";
 
 export default function Home() {
   return (
@@ -15,9 +14,8 @@ export default function Home() {
       ></div>
       <div className="px-[240px]">
         <Categories />
-        <Dishes />
+        <Dishes/>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -19,3 +19,4 @@ export default function RootLayout({
   }
     return <div>Not an admin</div>
 }
+
