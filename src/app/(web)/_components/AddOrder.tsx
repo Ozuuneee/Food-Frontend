@@ -18,7 +18,7 @@ import { url } from "node:inspector";
 
 export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
   const [order, setOrder] = useState(1);
-  const isAvielable = order >= 2 ? "border-primary" : "";
+  const isAvailable = order >= 2 ? "border-primary" : "";
   return (
     <Dialog>
       <DialogTitle className=" text-center ">
@@ -51,7 +51,7 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
               <div className="flex gap-3 items-center">
                 <Button
                   variant={"outline"}
-                  className={`${isAvielable} rounded-full px-3 py-5`}
+                  className={`${isAvailable} rounded-full px-3 py-5`}
                   onClick={() => {
                     if (order > 1) {
                       setOrder(order - 1);
@@ -73,9 +73,14 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
               </div>
             </div>
             <DialogClose asChild>
-              <Button className=" rounded-full" onClick={()=> {
-                setOrder(1)
-              }}>Add to cart</Button>
+              <Button
+                className=" rounded-full"
+                onClick={() => {
+                  setOrder(1);
+                }}
+              >
+                Add to cart
+              </Button>
             </DialogClose>
           </div>
         </div>

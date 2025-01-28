@@ -40,9 +40,7 @@ export default function RootLayout({
         className={`${inter.variable} ${inter.className} antialiased bg-neutral-700`}
       >
         <ClerkProvider>
-          <SignedOut>
-            {children}
-          </SignedOut>
+          <SignedOut>{children}</SignedOut>
           <SignedIn>{children}</SignedIn>
         </ClerkProvider>
       </body>
