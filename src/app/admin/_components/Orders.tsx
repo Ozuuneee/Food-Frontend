@@ -44,7 +44,7 @@ export default function Orders() {
       <div className="w-full p-6">
         <Card>
           <CardContent>
-            <h2 className="text-xl font-bold mb-4">Orders</h2>
+            <h2 className="text-xl font-bold mb-4 mt-4">Orders</h2>
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-100">

@@ -1,15 +1,42 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { Facebook, Instagram } from "lucide-react";
 import { Logo } from "@/app/admin/_components/Logo";
 
+interface Category {
+  _id: string;
+  categoryName: string;
+}
+
 const Footer: React.FC = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/food-category");
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError("Error loading categories");
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <footer className="bg-black text-white mt-16">
       <div className="bg-black w-[100%] h-10"></div>
       <div className="bg-red-500 overflow-hidden whitespace-nowrap">
         <div className="flex py-6 animate-marquee space-x-24">
-          <span className="text-3xl text-white">Fast food delivery</span>
-          <span className="text-3xl text-white">Fast food delivery</span>
           <span className="text-3xl text-white">Fast food delivery</span>
           <span className="text-3xl text-white">Fast food delivery</span>
           <span className="text-3xl text-white">Fast food delivery</span>
@@ -53,25 +80,20 @@ const Footer: React.FC = () => {
         </div>
 
         <div>
-          <h2 className="font-bold mb-4 text-lg">MENU</h2>
+          <h2 className="font-bold mb-4 text-lg">CATEGORIES</h2>
+          {error && <p className="text-red-400">{error}</p>}
           <ul className="grid grid-cols-2 gap-4 text-gray-400 text-sm">
-            {[
-              "Appetizers",
-              "Salads",
-              "Pizzas",
-              "Main dishes",
-              "Side dish",
-              "Brunch",
-              "Desserts",
-              "Beverages",
-              "Fish & Sea foods",
-            ].map((item, index) => (
-              <li key={index}>
-                <a href="/" className="hover:text-white">
-                  {item}
-                </a>
-              </li>
-            ))}
+            {categories.length > 0 ? (
+              categories.map((category) => (
+                <li key={category._id}>
+                  <Link href={`/${category._id}`} className="hover:text-white">
+                    {category.categoryName}
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <p className="text-gray-400">Loading categories...</p>
+            )}
           </ul>
         </div>
 
