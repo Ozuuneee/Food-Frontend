@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAuthFetch } from "@/app/(Hooks)/FetchData";
 import { FilteredFood } from "./FilteredFoods";
@@ -33,9 +32,11 @@ export const Dishes = () => {
     <div className="flex flex-col gap-[54px]">
       {!params.id
         ? foodCategory?.map((category) => {
-             const categoryFoods = foods.filter(food => food.category === category._id) 
+            const categoryFoods = foods.filter(
+              (food) => food.category === category._id
+            );
 
-             if (categoryFoods.length ===0) return null;
+            if (categoryFoods.length === 0) return null;
 
             return (
               <div key={category._id}>

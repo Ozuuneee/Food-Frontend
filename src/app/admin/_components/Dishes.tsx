@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import { FilteredFood } from "./FilteredFood";
 import { useParams } from "next/navigation";
 import { useAuthFetch } from "@/app/(Hooks)/FetchData";
@@ -11,7 +11,7 @@ export type CategoryType = {
 
 export const Dishes = () => {
   const params = useParams();
-  const foodCategory : CategoryType[] = useAuthFetch("food-category") || [];
+  const foodCategory: CategoryType[] = useAuthFetch("food-category") || [];
 
   //   const grouped = Object.groupBy(food, ({ category }) => category);
 

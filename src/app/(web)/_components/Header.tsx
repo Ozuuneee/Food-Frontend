@@ -2,26 +2,18 @@ import Link from "next/link";
 import { Logo } from "../../admin/_components/Logo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronRight, MapPin, ShoppingCart, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { User } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import CartSheet from "./SheetTable";
+import { AddLocation } from "./AddLocation";
 
 export const Header = () => {
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
 
   if (!isLoaded) {
     return null;
@@ -48,10 +40,7 @@ export const Header = () => {
             htmlFor="address"
             className="bg-background rounded-full py-2 px-3 flex items-center gap-1"
           >
-            <MapPin color="red" strokeWidth={1.5} />
-            <h3 className="text-red-500">Delivery address:</h3>
-            <h3 className="text-gray-500">Add location</h3>
-            <ChevronRight color={`gray`} strokeWidth={1.5} size={18} />
+            <AddLocation />
           </Label>
           <Input id="address" type="adress" className="hidden" />
         </div>

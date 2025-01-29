@@ -1,24 +1,32 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Image, Minus, Pencil, Plus, PlusIcon, Trash, X } from "lucide-react";
+import { Minus, Plus, PlusIcon } from "lucide-react";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { FoodType } from "./Dishes";
-import { url } from "node:inspector";
 
 export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
   const [order, setOrder] = useState(1);
-  const isAvailable = order >= 2 ? "border-primary" : "";
+  const isAvielable = order >= 2 ? "border-primary" : "";
+
+  const addFoodOrder = (food: FoodType) => {
+    localStorage.setItem(
+      "orderItems",
+      JSON.stringify([
+        {
+          food,
+          quantity: 1,
+        },
+      ])
+    );
+  };
+
   return (
     <Dialog>
       <DialogTitle className=" text-center ">
@@ -51,7 +59,7 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
               <div className="flex gap-3 items-center">
                 <Button
                   variant={"outline"}
-                  className={`${isAvailable} rounded-full px-3 py-5`}
+                  className={`${isAvielable} rounded-full px-3 py-5`}
                   onClick={() => {
                     if (order > 1) {
                       setOrder(order - 1);
@@ -76,6 +84,7 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
               <Button
                 className=" rounded-full"
                 onClick={() => {
+                  addFoodOrder(food);
                   setOrder(1);
                 }}
               >

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {  Image, Pencil, Trash, X } from "lucide-react";
+import { Image, Pencil, Trash, X } from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -13,13 +13,25 @@ import {
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { FoodType } from "./FilteredFood";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
+interface editDishProps {
+  setFoods: any;
+}
+
+export const EditDish = ({
+  food,
+  id,
+  setFoods,
+}: {
+  food: FoodType;
+  id: string;
+  setFoods: Dispatch<SetStateAction<FoodType[]>>;
+}) => {
   const [editFood, setEditFood] = useState<FoodType>(food);
 
   const editDish = async () => {
-    await fetch(`http://localhost:8000/food/${food._id}`, {
+    const response = await fetch(`http://localhost:8000/food/${food._id}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -27,6 +39,12 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
       method: "PUT",
       body: JSON.stringify(editFood),
     });
+    const newFood = await response.json();
+    setFoods &&
+      setFoods((prev) => {
+        const notEditedFoods = prev.filter((f) => f._id !== food._id);
+        return [...notEditedFoods, newFood];
+      });
   };
 
   const onChange = (e: any) => {
@@ -62,15 +80,21 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
     setEditFood({ ...editFood, image: "" });
   };
 
-  const deleteDish = async () =>{
+  const deleteDish = async () => {
     await fetch(`http://localhost:8000/food/${food._id}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "DELETE"
+      method: "DELETE",
     });
-  }
+
+    setFoods &&
+      setFoods((prev) => {
+        const updatedFoods = prev.filter((item) => item._id !== food._id);
+        return updatedFoods;
+      });
+  };
 
   return (
     <Dialog>
@@ -86,7 +110,12 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
           <DialogTitle>Dishes info</DialogTitle>
         </DialogHeader>
         <div className="flex gap-4">
-          <Label htmlFor="foodName" className="text-muted-foreground text-xs w-[120px]">Dish name</Label>
+          <Label
+            htmlFor="foodName"
+            className="text-muted-foreground text-xs w-[120px]"
+          >
+            Dish name
+          </Label>
           <Input
             value={editFood?.name}
             id="foodName"
@@ -97,7 +126,12 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
           />
         </div>
         <div className="flex gap-4">
-          <Label htmlFor="dishCategory" className="text-muted-foreground text-xs w-[120px]">Dish category</Label>
+          <Label
+            htmlFor="dishCategory"
+            className="text-muted-foreground text-xs w-[120px]"
+          >
+            Dish category
+          </Label>
           <Input
             value={editFood?.category}
             id="dishCategory"
@@ -108,7 +142,12 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
           />
         </div>
         <div className="flex gap-4">
-          <Label htmlFor="foodPrice" className="text-muted-foreground text-xs w-[120px]" >Food price</Label>
+          <Label
+            htmlFor="foodPrice"
+            className="text-muted-foreground text-xs w-[120px]"
+          >
+            Food price
+          </Label>
           <Input
             id="foodPrice"
             name="price"
@@ -119,7 +158,12 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
           />
         </div>
         <div className="flex gap-4">
-          <label htmlFor="ingredients" className="text-muted-foreground text-xs w-[120px]">Ingredients</label>
+          <label
+            htmlFor="ingredients"
+            className="text-muted-foreground text-xs w-[120px]"
+          >
+            Ingredients
+          </label>
           <textarea
             id="ingredients"
             name="ingredients"
@@ -132,7 +176,9 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
           ></textarea>
         </div>
         <div className="flex  gap-1.5">
-          <h1 className="text-muted-foreground text-xs w-[120px]">Food image</h1>
+          <h1 className="text-muted-foreground text-xs w-[120px]">
+            Food image
+          </h1>
           {editFood?.image !== "" ? (
             <div
               className={`bg-cover bg-center rounded-md h-[138px] w-full flex justify-end p-4 `}
@@ -174,7 +220,13 @@ export const EditDish = ({ food, id }: { food: FoodType; id: string }) => {
         </div>
         <div className="w-full pt-6 flex justify-between">
           <DialogClose asChild>
-            <Button variant='outline' className="border-red-500" onClick={deleteDish}><Trash color="red" strokeWidth={1.5}/></Button>
+            <Button
+              variant="outline"
+              className="border-red-500"
+              onClick={deleteDish}
+            >
+              <Trash color="red" strokeWidth={1.5} />
+            </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={editDish}>Edit dish</Button>

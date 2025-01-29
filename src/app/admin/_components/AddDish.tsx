@@ -7,11 +7,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { Plus, Image } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CategoryType } from "./Dishes";
 import { FoodType } from "./FilteredFood";
 
@@ -67,6 +68,7 @@ export const AddDish = ({ categoryName, _id, setFoods }: AddDishProps) => {
           body: data,
         }
       );
+      console.log(response);
 
       const dataJson = await response.json();
       setFood((prev: any) => ({ ...prev, image: dataJson.secure_url }));
@@ -129,7 +131,7 @@ export const AddDish = ({ categoryName, _id, setFoods }: AddDishProps) => {
           <h1 className="text-sm">Food image</h1>
           {food.image !== "" ? (
             <div
-              className={`bg-cover bg-center rounded-md h-[138px] `}
+              className={`w-full h-[135px] object-cover object-center rounded-t-3xl `}
               style={{ backgroundImage: `url(${food.image})` }}
             ></div>
           ) : (
