@@ -11,25 +11,41 @@ import {
 import { useState } from "react";
 import { FoodType } from "./Dishes";
 
+interface CartItem {
+  food: FoodType;
+  quantity: number;
+}
+
 export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
   const [order, setOrder] = useState(1);
-  const isAvielable = order >= 2 ? "border-primary" : "";
+  const isAvailable = order >= 2 ? "border-primary" : "";
 
   const addFoodOrder = (food: FoodType) => {
-    localStorage.setItem(
-      "orderItems",
-      JSON.stringify([
-        {
-          food,
-          quantity: 1,
-        },
-      ])
+    const existingCart: CartItem[] = JSON.parse(
+      localStorage.getItem("orderItems") || "[]"
     );
+
+    const existingItemIndex = existingCart.findIndex(
+      (item: CartItem) => item.food._id === food._id
+    );
+
+    if (existingItemIndex !== -1) {
+      existingCart[existingItemIndex].quantity += order;
+    } else {
+      existingCart.push({
+        food,
+        quantity: order,
+      });
+    }
+
+    localStorage.setItem("orderItems", JSON.stringify(existingCart));
+
+    setOrder(1);
   };
 
   return (
     <Dialog>
-      <DialogTitle className=" text-center ">
+      <DialogTitle className="text-center">
         <DialogTrigger asChild>
           <Button variant={"outline"} className="rounded-full px-3 py-5">
             <Plus color={"red"} />
@@ -38,15 +54,13 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
       </DialogTitle>
       <DialogContent className="max-w-3xl flex rounded-[20px] gap-6 p-6">
         <div
-          className="w-[377px] h-[364px] rounded-xl bg-cover bg-center bg-no-repeat "
+          className="w-[377px] h-[364px] rounded-xl bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${food.image})` }}
         ></div>
         <div className="flex flex-col justify-between mt-[36px] w-[377px]">
           <div className="grid gap-3">
-            <h2 className="text-red-500 text-3xl font-semibold ">
-              {food.name}
-            </h2>
-            <h4 className="text-base font-normal text-foreground ">
+            <h2 className="text-red-500 text-3xl font-semibold">{food.name}</h2>
+            <h4 className="text-base font-normal text-foreground">
               {food.ingredients}
             </h4>
           </div>
@@ -54,12 +68,14 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
             <div className="flex w-full justify-between items-center">
               <div>
                 <h4 className="text-base font-normal">Total price</h4>
-                <h4 className="text-2xl font-semibold">${food.price}</h4>
+                <h4 className="text-2xl font-semibold">
+                  ${(food.price * order).toFixed(2)}
+                </h4>
               </div>
               <div className="flex gap-3 items-center">
                 <Button
                   variant={"outline"}
-                  className={`${isAvielable} rounded-full px-3 py-5`}
+                  className={`${isAvailable} rounded-full px-3 py-5`}
                   onClick={() => {
                     if (order > 1) {
                       setOrder(order - 1);
@@ -82,10 +98,9 @@ export const AddOrder = ({ food, id }: { food: FoodType; id: string }) => {
             </div>
             <DialogClose asChild>
               <Button
-                className=" rounded-full"
+                className="rounded-full"
                 onClick={() => {
                   addFoodOrder(food);
-                  setOrder(1);
                 }}
               >
                 Add to cart

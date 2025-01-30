@@ -36,10 +36,13 @@ const Footer: React.FC = () => {
     <footer className="bg-black text-white mt-16">
       <div className="bg-black w-[100%] h-10"></div>
       <div className="bg-red-500 overflow-hidden whitespace-nowrap">
-        <div className="flex py-6 animate-marquee space-x-24">
-          <span className="text-3xl text-white">Fast food delivery</span>
-          <span className="text-3xl text-white">Fast food delivery</span>
-          <span className="text-3xl text-white">Fast food delivery</span>
+        <div className="flex py-6 animate-marquee space-x-24 text-3xl font-semibold text-white">
+          <span>Fresh Fast Delivered</span>
+          <span>Fresh Fast Delivered</span>
+          <span>Fresh Fast Delivered</span>
+          <span>Fresh Fast Delivered</span>
+          <span>Fresh Fast Delivered</span>
+          <span>Fresh Fast Delivered</span>
         </div>
       </div>
 

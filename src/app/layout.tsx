@@ -8,6 +8,7 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/nextjs";
+import { CartProvider } from "./(web)/_components/cartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,8 +41,11 @@ export default function RootLayout({
         className={`${inter.variable} ${inter.className} antialiased bg-neutral-700`}
       >
         <ClerkProvider>
-          <SignedOut>{children}</SignedOut>
-          <SignedIn>{children}</SignedIn>
+          <CartProvider>
+            {" "}
+            <SignedOut>{children}</SignedOut>
+            <SignedIn>{children}</SignedIn>
+          </CartProvider>
         </ClerkProvider>
       </body>
     </html>
