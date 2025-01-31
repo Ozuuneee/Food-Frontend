@@ -66,7 +66,7 @@ const SheetTable = () => {
           <ShoppingCart size={15} />
         </button>
       </SheetTrigger>
-      <SheetContent className="bg-[#404040] text-primary-foreground min-w-[540px] border-none ">
+      <SheetContent className="bg-[#404040] text-primary-foreground min-w-[540px]">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-3 text-lg text-primary-foreground">
             <ShoppingCart size={20} /> Order Detail
